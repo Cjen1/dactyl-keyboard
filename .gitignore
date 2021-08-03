@@ -6,7 +6,7 @@
 
 .lein-*
 *.gcode
-*.scad
+**.scad
 /target
 .idea/
 *.FCStd1
@@ -14,3 +14,5 @@ debug_*
 */__pycache__/*
 *~$*
 things/
+
+**.swp

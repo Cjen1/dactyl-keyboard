@@ -672,6 +672,8 @@ def thumbcaps():
         return mini_thumbcaps()
     elif thumb_style == "CARBONFET":
         return carbonfet_thumbcaps()
+    elif thumb_style == "TRACKBALL":
+        return tb_thumbcaps()
     else:
         return default_thumbcaps()
 
@@ -681,6 +683,8 @@ def thumb(side="right"):
         return mini_thumb(side)
     elif thumb_style == "CARBONFET":
         return carbonfet_thumb(side)
+    elif thumb_style == "TRACKBALL":
+        return tb_thumb(side)
     else:
         return default_thumb(side)
 
@@ -690,6 +694,8 @@ def thumb_connectors():
         return mini_thumb_connectors()
     elif thumb_style == "CARBONFET":
         return carbonfet_thumb_connectors()
+    elif thumb_style == "TRACKBALL":
+        return tb_thumb_connectors()
     else:
         return default_thumb_connectors()
 
@@ -1430,6 +1436,300 @@ def carbonfet_thumb_connectors():
 
     return union(hulls)
 
+############################
+# TRACKBALL THUMB CLUSTER
+############################
+
+# single_plate = the switch shape
+
+def tb_thumb_tr_place(shape):
+    shape = rotate(shape, [10, -15, 10])
+    shape = translate(shape, thumborigin())
+    shape = translate(shape, [-12, -16, 3])
+    return shape
+
+
+def tb_thumb_mr_place(shape):
+    shape = rotate(shape, [-6, -34, 48])
+    shape = translate(shape, thumborigin())
+    shape = translate(shape, [-29, -40, -13])
+    return shape
+
+
+def tb_thumb_br_place(shape):
+    shape = rotate(shape, [-16, -33, 54])
+    shape = translate(shape, thumborigin())
+    shape = translate(shape, [-37.8, -55.3, -25.3])
+    return shape
+
+
+def tb_thumb_bl_place(shape):
+    shape = rotate(shape, [-4, -35, 52])
+    shape = translate(shape, thumborigin())
+    shape = translate(shape, [-56.3, -43.3, -23.5])
+    return shape
+
+
+def tb_thumb_1x_layout(shape, cap=False):
+    if cap:
+        shape_list = [
+            tb_thumb_mr_place(rotate(shape, [0, 0, thumb_plate_mr_rotation])),
+            tb_thumb_br_place(rotate(shape, [0, 0, thumb_plate_br_rotation])),
+            tb_thumb_bl_place(rotate(shape, [0, 0, thumb_plate_bl_rotation])),
+        ]
+
+        shapes = add(shape_list)
+
+    else:
+        shape_list = [
+                tb_thumb_mr_place(rotate(shape, [0, 0, thumb_plate_mr_rotation])),
+                tb_thumb_br_place(rotate(shape, [0, 0, thumb_plate_br_rotation])),
+                tb_thumb_bl_place(rotate(shape, [0, 0, thumb_plate_bl_rotation])),
+            ]
+        shapes = union(shape_list)
+    return shapes
+
+def tb_thumb_15x_layout(shape):
+    return union([tb_thumb_tr_place(rotate(shape, [0, 0, thumb_plate_tr_rotation]))])
+
+def tb_thumbcaps():
+    t1 = tb_thumb_1x_layout(sa_cap(1))
+    t15 = tb_thumb_15x_layout(sa_cap(1))
+    return t1.add(t15)
+
+def tb_thumb(side="right"):
+    t1 = tb_thumb_1x_layout(single_plate(side=side))
+    t15 = tb_thumb_15x_layout(single_plate(side=side))
+
+    return union([t1, t15])
+
+def thumb_post_tr():
+    return translate(web_post(),
+                     [(mount_width / 2) - post_adj, ((mount_height/2) + double_plate_height) - post_adj, 0]
+                     )
+
+
+def thumb_post_tl():
+    return translate(web_post(),
+                     [-(mount_width / 2) + post_adj, ((mount_height/2) + double_plate_height) - post_adj, 0]
+                     )
+
+
+def thumb_post_bl():
+    return translate(web_post(),
+                     [-(mount_width / 2) + post_adj, -((mount_height/2) + double_plate_height) + post_adj, 0]
+                     )
+
+
+def thumb_post_br():
+    return translate(web_post(),
+                     [(mount_width / 2) - post_adj, -((mount_height/2) + double_plate_height) + post_adj, 0]
+                     )
+
+def tb_thumb_connectors():
+    hulls = []
+
+    # Top to trackball
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                thumb_tl_place(web_post_tr()),
+#                mini_thumb_tl_place(web_post_br()),
+#                mini_thumb_tr_place(mini_thumb_post_tl()),
+#                mini_thumb_tr_place(mini_thumb_post_bl()),
+#            ]
+#        )
+#    )
+
+    # bottom two on the right
+    hulls.append(
+        triangle_hulls(
+            [
+                mini_thumb_br_place(web_post_tr()),
+                mini_thumb_br_place(web_post_br()),
+                mini_thumb_mr_place(web_post_tl()),
+                mini_thumb_mr_place(web_post_bl()),
+            ]
+        )
+    )
+#
+#    # bottom two on the left
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                mini_thumb_mr_place(web_post_tr()),
+#                mini_thumb_mr_place(web_post_br()),
+#                mini_thumb_tr_place(mini_thumb_post_br()),
+#            ]
+#        )
+#    )
+#
+#    # between top and bottom row
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                mini_thumb_br_place(web_post_tl()),
+#                mini_thumb_bl_place(web_post_bl()),
+#                mini_thumb_br_place(web_post_tr()),
+#                mini_thumb_bl_place(web_post_br()),
+#                mini_thumb_mr_place(web_post_tl()),
+#                mini_thumb_tl_place(web_post_bl()),
+#                mini_thumb_mr_place(web_post_tr()),
+#                mini_thumb_tl_place(web_post_br()),
+#                mini_thumb_tr_place(web_post_bl()),
+#                mini_thumb_mr_place(web_post_tr()),
+#                mini_thumb_tr_place(web_post_br()),
+#            ]
+#        )
+#    )
+#    # top two to the main keyboard, starting on the left
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                mini_thumb_tl_place(web_post_tl()),
+#                mini_thumb_bl_place(web_post_tr()),
+#                mini_thumb_tl_place(web_post_bl()),
+#                mini_thumb_bl_place(web_post_br()),
+#                mini_thumb_mr_place(web_post_tr()),
+#                mini_thumb_tl_place(web_post_bl()),
+#                mini_thumb_tl_place(web_post_br()),
+#                mini_thumb_mr_place(web_post_tr()),
+#            ]
+#        )
+#    )
+#    # top two to the main keyboard, starting on the left
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                mini_thumb_tl_place(web_post_tl()),
+#                key_place(web_post_bl(), 0, cornerrow),
+#                mini_thumb_tl_place(web_post_tr()),
+#                key_place(web_post_br(), 0, cornerrow),
+#                mini_thumb_tr_place(mini_thumb_post_tl()),
+#                key_place(web_post_bl(), 1, cornerrow),
+#                mini_thumb_tr_place(mini_thumb_post_tr()),
+#                key_place(web_post_br(), 1, cornerrow),
+#                key_place(web_post_tl(), 2, lastrow),
+#                key_place(web_post_bl(), 2, lastrow),
+#                mini_thumb_tr_place(mini_thumb_post_tr()),
+#                key_place(web_post_bl(), 2, lastrow),
+#                mini_thumb_tr_place(mini_thumb_post_br()),
+#                key_place(web_post_br(), 2, lastrow),
+#                key_place(web_post_bl(), 3, lastrow),
+#                key_place(web_post_tr(), 2, lastrow),
+#                key_place(web_post_tl(), 3, lastrow),
+#                key_place(web_post_bl(), 3, cornerrow),
+#                key_place(web_post_tr(), 3, lastrow),
+#                key_place(web_post_br(), 3, cornerrow),
+#            ]
+#        )
+#    )
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                key_place(web_post_tr(), 3, lastrow),
+#                key_place(web_post_br(), 3, lastrow),
+#                key_place(web_post_bl(), 4, cornerrow),
+#            ]
+#        )
+#    )
+#
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                key_place(web_post_tr(), 3, lastrow),
+#                key_place(web_post_br(), 3, cornerrow),
+#                key_place(web_post_bl(), 4, cornerrow),
+#            ]
+#        )
+#    )
+#    hulls.append(
+#        triangle_hulls(
+#            [
+#                key_place(web_post_br(), 1, cornerrow),
+#                key_place(web_post_tl(), 2, lastrow),
+#                key_place(web_post_bl(), 2, cornerrow),
+#                key_place(web_post_tr(), 2, lastrow),
+#                key_place(web_post_br(), 2, cornerrow),
+#                key_place(web_post_bl(), 3, cornerrow),
+#            ]
+#        )
+#    )
+
+    return union(hulls)
+
+def tb_thumb_walls():
+    # thumb, walls
+    shape = union([wall_brace(tb_thumb_mr_place, 0, -1, web_post_br(), tb_thumb_tr_place, 0, -1, web_post_br())])
+#    shape = union([shape, wall_brace(tb_thumb_mr_place, 0, -1, web_post_br(), tb_thumb_mr_place, 0, -1.15, web_post_bl())])
+#    shape = union([shape, wall_brace(tb_thumb_br_place, 0, -1, web_post_br(), tb_thumb_br_place, 0, -1, web_post_bl())])
+#    shape = union([shape, wall_brace(tb_thumb_bl_place, -.3, 1, thumb_post_tr(), tb_thumb_bl_place, 0, 1, thumb_post_tl())])
+#    shape = union([shape, wall_brace(tb_thumb_br_place, -1, 0, web_post_tl(), tb_thumb_br_place, -1, 0, web_post_bl())])
+#    shape = union([shape, wall_brace(tb_thumb_bl_place, -1, 0, thumb_post_tl(), tb_thumb_bl_place, -1, 0, web_post_bl())])
+#    # thumb, corners
+#    shape = union([shape, wall_brace(tb_thumb_br_place, -1, 0, web_post_bl(), tb_thumb_br_place, 0, -1, web_post_bl())])
+#    shape = union([shape, wall_brace(tb_thumb_bl_place, -1, 0, thumb_post_tl(), tb_thumb_bl_place, 0, 1, thumb_post_tl())])
+#    # thumb, tweeners
+#    shape = union([shape, wall_brace(tb_thumb_mr_place, 0, -1.15, web_post_bl(), tb_thumb_br_place, 0, -1, web_post_br())])
+#    shape = union([shape, wall_brace(tb_thumb_bl_place, -1, 0, web_post_bl(), tb_thumb_br_place, -1, 0, web_post_tl())])
+#    shape = union([shape, wall_brace(tb_thumb_tr_place, 0, -1, web_post_br(), (lambda sh: key_place(sh, 3, lastrow)), 0, -1, web_post_bl())])
+    return shape
+
+def tb_thumb_connection():
+    # clunky bit on the top left thumb connection  (normal connectors don't work well)
+    shape = bottom_hull(
+        [
+            left_key_place(translate(web_post(), wall_locate2(-1, 0)), cornerrow, -1, low_corner=True),
+            left_key_place(translate(web_post(), wall_locate3(-1, 0)), cornerrow, -1, low_corner=True),
+            tb_thumb_bl_place(translate(thumb_post_tr(), wall_locate2(-0.3, 1))),
+            tb_thumb_bl_place(translate(thumb_post_tr(), wall_locate3(-0.3, 1))),
+        ]
+    )
+
+    #shape = union([shape,
+    #    hull_from_shapes(
+    #    [
+    #        left_key_place(translate(web_post(), wall_locate2(-1, 0)), cornerrow, -1, low_corner=True),
+    #        left_key_place(translate(web_post(), wall_locate3(-1, 0)), cornerrow, -1, low_corner=True),
+    #        tb_thumb_bl_place(translate(thumb_post_tr(), wall_locate2(-0.3, 1))),
+    #        tb_thumb_bl_place(translate(thumb_post_tr(), wall_locate3(-0.3, 1))),
+    #        tb_thumb_ml_place(thumb_post_tl()),
+    #    ]
+    #)])
+
+    #shape = union([shape,
+    #    hull_from_shapes(
+    #    [
+    #        left_key_place(web_post(), cornerrow, -1, low_corner=True),
+    #        left_key_place(translate(web_post(), wall_locate1(-1, 0)), cornerrow, -1, low_corner=True),
+    #        left_key_place(translate(web_post(), wall_locate2(-1, 0)), cornerrow, -1, low_corner=True),
+    #        left_key_place(translate(web_post(), wall_locate3(-1, 0)), cornerrow, -1, low_corner=True),
+    #        tb_thumb_ml_place(thumb_post_tl()),
+    #    ]
+    #)])
+
+    #shape = union([shape,
+    #    hull_from_shapes(
+    #    [
+    #        left_key_place(web_post(), cornerrow, -1, low_corner=True),
+    #        left_key_place(translate(web_post(), wall_locate1(-1, 0)), cornerrow, -1, low_corner=True),
+    #        key_place(web_post_bl(), 0, cornerrow),
+    #        tb_thumb_ml_place(thumb_post_tl()),
+    #    ]
+    #)])
+
+    #shape = union([shape,
+    #    hull_from_shapes(
+    #    [
+    #        tb_thumb_bl_place(thumb_post_tr()),
+    #        tb_thumb_bl_place(translate(thumb_post_tr(), wall_locate1(-0.3, 1))),
+    #        tb_thumb_bl_place(translate(thumb_post_tr(), wall_locate2(-0.3, 1))),
+    #        tb_thumb_bl_place(translate(thumb_post_tr(), wall_locate3(-0.3, 1))),
+    #        tb_thumb_ml_place(thumb_post_tl()),
+    #    ]
+    #)])
+
+    return shape
 
 ##########
 ## Case ##
@@ -1697,6 +1997,8 @@ def thumb_walls():
         return mini_thumb_walls()
     elif thumb_style == "CARBONFET":
         return carbonfet_thumb_walls()
+    elif thumb_style == "TRACKBALL":
+        return tb_thumb_walls()
     else:
         return default_thumb_walls()
 
@@ -1705,6 +2007,8 @@ def thumb_connection():
         return mini_thumb_connection()
     elif thumb_style == "CARBONFET":
         return carbonfet_thumb_connection()
+    elif thumb_style == "TRACKBALL":
+        return tb_thumb_connection()
     else:
         return default_thumb_connection()
 

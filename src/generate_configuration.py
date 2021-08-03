@@ -7,7 +7,7 @@ r2d = 180 / pi
 
 shape_config = {
 
-    'ENGINE': 'solid', # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
+    'ENGINE': 'cadquery', # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
     # 'ENGINE':  'cadquery', # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
 
 
@@ -43,7 +43,7 @@ shape_config = {
     ##############################
     # THUMB PARAMETERS
     ##############################
-    'thumb_style': 'DEFAULT',  # 'DEFAULT', 'MINI', 'CARBONFET'
+    'thumb_style': 'TRACKBALL',  # 'DEFAULT', 'MINI', 'CARBONFET'
     'default_1U_cluster': True, # only used with default, makes top right thumb cluster key 1U
     # Thumb plate rotations, anything other than 90 degree increments WILL NOT WORK.
     'thumb_plate_tr_rotation': 0.0,  # Top right plate rotation tweaks as thumb cluster is crowded for hot swap, etc.
@@ -102,7 +102,7 @@ shape_config = {
     # 'HS_NUB' = hot swap underside with nubs.
     # 'HS_UNDERCUT' = hot swap underside with undercut. Does not generate properly.  Hot swap step needs to be modified.
     # 'HS_NOTCH' = hot swap underside with notch.  Does not generate properly.  Hot swap step needs to be modified.
-    'plate_style':  'NOTCH',
+    'plate_style':  'HS_NUB',
 
     'hole_keyswitch_height':  14.0,
     'hole_keyswitch_width':  14.0,
