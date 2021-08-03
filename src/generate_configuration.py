@@ -7,7 +7,7 @@ r2d = 180 / pi
 
 shape_config = {
 
-    'ENGINE': 'cadquery', # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
+    'ENGINE': 'solid', # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
     # 'ENGINE':  'cadquery', # 'solid' = solid python / OpenSCAD, 'cadquery' = cadquery / OpenCascade
 
 
@@ -18,9 +18,9 @@ shape_config = {
     'save_dir': '.',
     'config_name':  "DM",
 
-    'show_caps':  True,
+    'show_caps':  False,
 
-    'nrows':  5, #5,  # key rows
+    'nrows':  4, #5,  # key rows
     'ncols':  6, #6,  # key columns
 
     'alpha':  pi / 12.0,  # curvature of the columns
@@ -139,7 +139,7 @@ shape_config = {
     # 'SLIDING' = Features to slide the OLED in place and use a pin or block to secure from underneath.
     # 'CLIP' = Features to set the OLED in a frame a snap a bezel down to hold it in place.
 
-    'oled_mount_type':  'CLIP',
+    'oled_mount_type':None,
     'oled_center_row': 1.5, # if not None, this will override the oled_mount_location_xyz and oled_mount_rotation_xyz settings
     'oled_translation_offset': (0, 0, 4), # Z offset tweaks are expected depending on curvature and OLED mount choice.
     'oled_rotation_offset': (0, 0, 0),
@@ -222,7 +222,7 @@ shape_config = {
     'post_size':  0.1,
     # post_adj':  post_size / 2
     'post_adj':  0,
-    'screws_offset': 'INSIDE', #'OUTSIDE', 'INSIDE', 'ORIGINAL'
+    'screws_offset': 'OUTSIDE', #'OUTSIDE', 'INSIDE', 'ORIGINAL'
 
     ###################################
     ## Controller Mount / Connectors ##
@@ -234,7 +234,7 @@ shape_config = {
     # 'USB_TEENSY' = Teensy holder, no RJ9
     # 'EXTERNAL' = square cutout for a holder such as the one from lolligagger.
     # 'NONE' = No openings in the back.
-    'controller_mount_type':  'EXTERNAL',
+    'controller_mount_type':  'USB_TEENSY',
 
     'external_holder_height':  12.5,
     'external_holder_width':  28.75,
