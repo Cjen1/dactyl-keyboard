@@ -2165,6 +2165,7 @@ def tbcj_place(shape):
     return shape
 
 def tbcj_thumb(side="right"):
+    print("tbcj_thumb")
     t = tbcj_thumb_layout(single_plate(side=side))
     tb = tbcj_place(tbcj_holder())
     return union([t, tb])
@@ -2191,9 +2192,7 @@ def tbcj_thumb_connectors():
 
     t = triangle_hulls
 
-    hulls = []
-
-    hulls.append([
+    hulls = [
         #trackball connections
         t([bot(bl), tb(4), bot(br), tb(3), bot(tr)]),
         t([bot(tr), tb(3), mid(bl), tb(2), mid(br)]),
@@ -2204,7 +2203,7 @@ def tbcj_thumb_connectors():
         t([top(bl), mid(br), top(tl), mid(tr)]),
         # mid - bot
         t([mid(tl), bot(tl), mid(bl), bot(tr)]),
-    ])
+    ]
     return union(hulls)
 
 ##########
@@ -2686,7 +2685,7 @@ def tbcj_thumb_connection(side='right'):
         t([
             left_key_place(web_post(), lastrow - 1, -1, side=side, low_corner=True),
             mid(tl),
-            kp(bl(), 0, cornerrow),
+            kp(bl, 0, cornerrow),
             mid(tr),
             kp(bl, 0, cornerrow),
             top(tl),
@@ -3632,11 +3631,14 @@ def screw_insert_thumb(bottom_radius, top_radius, height):
         position = thumborigin()
         position = list(np.array(position) + np.array([-48, -37, 0]))
         position[2] = 0
-    elif thumb_style == 'TRACKBALL':
+    elif thumb_style == 'TRACKBALL_ORBYL':
         position = thumborigin()
-        position = list(np.array(position) + np.array([-72, -40, -16]))
+        position = list(np.array(position) + np.array([-21, -58, 0]))
         position[2] = 0
-
+    elif thumb_style == 'TRACKBALL_CJ':
+        position = thumborigin()
+        position = list(np.array(position) + np.array([-55, -62, -16]))
+        position[2] = 0
     else:
         position = thumborigin()
         position = list(np.array(position) + np.array([-21, -58, 0]))
